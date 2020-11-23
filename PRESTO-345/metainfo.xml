@@ -5,30 +5,30 @@
         <service>
             <name>PRESTO</name>
             <displayName>PRESTO</displayName>
-            <comment>一个分布式SQL交互式查询引擎。</comment>
+            <comment>一个基于内存分布式 MPP (Massive Parallel Processing) SQL交互式查询引擎。</comment>
             <version>345</version>
             <components>
                 <component>
-                    <name>PRESTO_CLIENT</name>
-                    <displayName>PRESTO Client</displayName>
-                    <category>CLIENT</category>
-                    <cardinality>1+</cardinality>
+                    <name>PRESTO_COORDINATOR</name>
+                    <displayName>PRESTO Coordinator</displayName>
+                    <category>MASTER</category>
+                    <cardinality>1</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <commandScript>
-                        <script>scripts/presto_worker.py</script>
+                        <script>scripts/presto_coordinator.py</script>
                         <scriptType>PYTHON</scriptType>
                         <timeout>1200</timeout>
                     </commandScript>
-                    <configFiles>
+<!--                     <configFiles>
                         <configFile>
                             <type>env</type>
                             <fileName>presto-conf.yaml</fileName>
                             <dictionaryName>presto-conf</dictionaryName>
                         </configFile>
-                    </configFiles>
+                    </configFiles> -->
                     <logs>
                         <log>
-                            <logId>presto_master</logId>
+                            <logId>presto_coordinator</logId>
                             <primary>true</primary>
                         </log>
                     </logs>
