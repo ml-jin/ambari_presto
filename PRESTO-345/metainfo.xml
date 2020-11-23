@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<metainfo>
+    <schemaVersion>2.0</schemaVersion>
+    <services>
+        <service>
+            <name>PRESTO</name>
+            <displayName>Flink</displayName>
+            <comment>一个面向分布式数据流处理和批量数据处理的开源计算平台。</comment>
+            <version>345</version>
+            <components>
+                <component>
+                    <name>FLINK_CLIENT</name>
+                    <displayName>Flink Client</displayName>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
+                    <versionAdvertised>true</versionAdvertised>
+                    <commandScript>
+                        <script>scripts/flink_client.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>1200</timeout>
+                    </commandScript>
+                    <configFiles>
+                        <configFile>
+                            <type>env</type>
+                            <fileName>flink-conf.yaml</fileName>
+                            <dictionaryName>flink-conf</dictionaryName>
+                        </configFile>
+                    </configFiles>
+                    <logs>
+                        <log>
+                            <logId>flink_master</logId>
+                            <primary>true</primary>
+                        </log>
+                    </logs>
+                </component>
+                <!--<component>
+                    <name>FLINK_SLAVE</name>
+                    <displayName>Flink Slave</displayName>
+                    <category>SLAVE</category>
+                    <cardinality>0+</cardinality>
+                    <versionAdvertised>true</versionAdvertised>
+                    <commandScript>
+                        <script>scripts/flink_slave.py</script>
+                        <scriptType>PYTHON</scriptType>
+                        <timeout>1200</timeout>
+                    </commandScript>
+                    <logs>
+                        <log>
+                            <logId>flink_slave</logId>
+                            <primary>true</primary>
+                        </log>
+                    </logs>
+                </component>-->
+            </components>
+            <osSpecifics>
+                <osSpecific>
+                    <osFamily>any</osFamily>
+                    <packages>
+                        <package>
+                            <name>flink-1.8.1</name>  <!-- Not using. Please make sure the os already contains all the dependencies. -->
+                        </package>
+                    </packages>
+                </osSpecific>
+            </osSpecifics>
+            <!--
+            <commandScript>
+                <script>scripts/service_check.py</script>
+                <scriptType>PYTHON</scriptType>
+                <timeout>300</timeout>
+            </commandScript>
+            -->
+
+            <configuration-dependencies>
+                <config-type>flink-conf</config-type>
+            </configuration-dependencies>
+
+            <restartRequiredAfterChange>true</restartRequiredAfterChange>
+
+            <!--<quickLinksConfigurations>
+                <quickLinksConfiguration>
+                    <fileName>quicklinks.json</fileName>
+                    <default>true</default>
+                </quickLinksConfiguration>
+            </quickLinksConfigurations>-->
+
+        </service>
+    </services>
+</metainfo>
