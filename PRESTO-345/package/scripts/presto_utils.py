@@ -3,7 +3,7 @@
 from resource_management import *
 import os
 
-FLINK_DIR_NAME = 'presto-345'
+PRESTO_DIR_NAME = 'presto-345'
 
 
 # def get_start_yarn_session_cmd(flink_base_dir, yarn_session_name, jm_heap_size, tm_heap_size, slot_count):
@@ -13,4 +13,4 @@ FLINK_DIR_NAME = 'presto-345'
 def create_symbolic_link():
     import params
     # Link('/bin/yarn-session', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/yarn-session.sh'))
-    Link('/bin/flink', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/flink'))
+    Link('/bin/launcher', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/launcher.sh'))
