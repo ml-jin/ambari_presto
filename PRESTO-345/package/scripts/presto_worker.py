@@ -40,15 +40,17 @@ class PrestoMaster(Script):
                   )
 
         Logger.info('Downloading presto binaries')
-        Execute("cd {0}; wget {1} -O presto.tar.gz".format(params.presto_base_dir, params.presto_download_url), user=params.presto_user)
+        Execute("cd {0}; wget {1} -O presto-server-345.tar.gz".format(params.presto_base_dir, params.presto_download_url), user=params.presto_user)
 
         Logger.info('Extracting presto binaries')
-        Execute("cd {0}; tar -zxvf presto.tar.gz".format(params.presto_base_dir), user=params.presto_user)
+        Execute("cd {0}; tar -zxvf presto-server-345.tar.gz".format(params.presto_base_dir), user=params.presto_user)
 
-        Logger.info('Creating symbolic links')
-        create_symbolic_link()
+        # Logger.info('Creating symbolic links')
+        # create_symbolic_link()
+        import os
+        os.system("/usr/hdp/3.0.1.0-187/presto/bin/launcher run")
 
-        self.configure(env)
+        # self.configure(env) # temperary not using
 
         Logger.info('presto installation completed')
 
@@ -69,9 +71,9 @@ class PrestoMaster(Script):
         self.configure(env)
 
         Logger.info('Starting presto yarn session')
-        cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
-        Execute(cmd, user=params.presto_user)
-
+        # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
+        # Execute(cmd, user=params.presto_user)
+        os.system("/usr/hdp/3.0.1.0-187/presto/bin/launcher run")
         Logger.info('presto yarn session started')
 
     def status(self, env):

@@ -10,7 +10,7 @@ FLINK_DIR_NAME = 'presto-345'
 #     return '{0} -d -nm {1} -jm {2} -tm {3} -s {4}'.format(os.path.join(flink_base_dir, FLINK_DIR_NAME, 'bin/yarn-session.sh'), yarn_session_name, jm_heap_size, tm_heap_size, slot_count)
 
 
-# def create_symbolic_link():
-#     import params
-#     # Link('/bin/yarn-session', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/yarn-session.sh'))
-#     Link('/bin/flink', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/flink'))
+def create_symbolic_link():
+    import params
+    # Link('/bin/yarn-session', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/yarn-session.sh'))
+    Link('/bin/flink', to=os.path.join(params.flink_base_dir, FLINK_DIR_NAME, 'bin/flink'))
