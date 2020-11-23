@@ -3,8 +3,8 @@
 from resource_management import *
 from resource_management.core.exceptions import ClientComponentHasNoStatus
 from resource_management.core.logger import Logger
-# from yarn_utils import *
-# from presto_utils import *
+from yarn_utils import *
+from presto_utils import *
 import pwd,grp
 
 
@@ -93,4 +93,4 @@ class PrestoMaster(Script):
 
 
 if __name__ == '__main__':
-    prestoMaster().execute()
+    PrestoMaster().execute()

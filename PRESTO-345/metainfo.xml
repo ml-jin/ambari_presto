@@ -4,7 +4,7 @@
     <services>
         <service>
             <name>PRESTO</name>
-            <displayName>Flink</displayName>
+            <displayName>PRESTO</displayName>
             <comment>一个分布式SQL交互式查询引擎。</comment>
             <version>345</version>
             <components>

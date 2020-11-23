@@ -32,8 +32,22 @@
     <property>
         <name>presto_user</name>
         <value>presto</value>
-        <display-name>presto User</display-name>
+        <display-name>presto user</display-name>
         <description>presto 用户名</description>
+    </property>
+
+    <property>
+        <name>presto_source</name>
+        <value>/usr/hdp/3.0.1.0-187/presto/jdk11</value>
+        <display-name>presto jdk source</display-name>
+        <description>presto jdk</description>
+    </property>
+
+    <property>
+        <name>presto_destination</name>
+        <value>/usr/hdp/3.0.1.0-187/presto/jdk11</value>
+        <display-name>presto jdk dest</display-name>
+        <description>presto jdk dest</description>
     </property>
 
     <property>

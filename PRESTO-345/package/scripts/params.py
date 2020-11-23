@@ -13,6 +13,7 @@ import repoin
 config = Script.get_config()
 
 presto_TAR_NAME = 'presto-server-345.tar.gz'
+presto_JDK_NAME = 'jdk-11.0.9_linux-x64_bin.tar.gz'
 
 presto_conf = config['configurations']['presto-conf']
 
@@ -22,6 +23,10 @@ presto_group = presto_conf['presto_group']
 presto_download_url = os.path.join(repoin.baseurl, 'presto', presto_TAR_NAME)
 
 presto_base_dir = presto_conf['presto_base_dir']
+
+presto_jdk11_source = os.path.join(repoin.baseurl, 'presto', presto_JDK_NAME)
+presto_jdk11_dest = presto_conf['presto_destination']
+
 
 # Common
 
