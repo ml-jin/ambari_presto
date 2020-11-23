@@ -9,16 +9,16 @@
     },
     "links": [
       {
-        "name": "elasticsearch_ui",
-        "label": "Elasticsearch UI",
+        "name": "presto_ui",
+        "label": "PRESTO UI",
         "requires_user_name": "false",
-        "component_name": "ELASTICSEARCH_MASTER",
+        "component_name": "PRESTO_MASTER",
         "url":"%@://%@:%@",
         "port":{
           "http_property": "http_port",
-          "http_default_port": "9200",
+          "http_default_port": "30085",
           "https_property": "http_port",
-          "https_default_port": "9200",
+          "https_default_port": "30085",
           "regex": "\\w*:(\\d+)",
           "site": "elastic-config"
         }

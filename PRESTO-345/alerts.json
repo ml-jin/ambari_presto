@@ -1,17 +1,17 @@
 {
-  "ELASTICSEARCH": {
+  "presto": {
     "service": [],
-    "ELASTICSEARCH_MASTER": [
+    "presto_MASTER": [
       {
-        "name": "elasticsearch_port",
-        "label": "Elasticsearch Port",
-        "description": "This host-level alert is triggered if the 9200 port is unreachable.",
+        "name": "presto_port",
+        "label": "presto Port",
+        "description": "This host-level alert is triggered if the 30085 port is unreachable.",
         "interval": 1,
         "scope": "HOST",
         "source": {
           "type": "PORT",
-          "uri": "{{elasticsearch-config/http.port}}",
-          "default_port": 9200,
+          "uri": "{{presto-config/http.port}}",
+          "default_port": 30085,
           "reporting": {
             "ok": {
               "text": "TCP OK - {0:.3f}s response on port {1}"
