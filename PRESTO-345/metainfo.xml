@@ -11,8 +11,8 @@
                 <component>
                     <name>PRESTO_COORDINATOR</name>
                     <displayName>PRESTO Coordinator</displayName>
-                    <category>MASTER</category>
-                    <cardinality>1</cardinality>
+                    <category>CLIENT</category>
+                    <cardinality>1+</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <commandScript>
                         <script>scripts/presto_coordinator.py</script>

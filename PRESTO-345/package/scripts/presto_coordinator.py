@@ -59,7 +59,7 @@ class PrestoMaster(Script):
         Execute("cd {0}; wget {1} -O jdk-11.0.9_linux-x64_bin.tar.gz".format(params.presto_base_dir, params.presto_jdk11_download_url), user=params.presto_user)
 
         Logger.info('Extracting jdk binaries')
-        Execute("cd {0};  tar -zxvf jdk-11.0.9_linux-x64_bin.tar.gz -c {1}".format(params.presto_base_dir, params.presto_jdk11_dest), user=params.presto_user)
+        Execute("cd {0};  tar -zxvf jdk-11.0.9_linux-x64_bin.tar.gz -C {1}".format(params.presto_base_dir, params.presto_jdk11_dest), user=params.presto_user)
 
         # download presto 
         Logger.info('Downloading presto binaries')
