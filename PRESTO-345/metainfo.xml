@@ -19,13 +19,13 @@
                         <scriptType>PYTHON</scriptType>
                         <timeout>1200</timeout>
                     </commandScript>
-<!--                     <configFiles>
+                    <configFiles>
                         <configFile>
                             <type>env</type>
                             <fileName>presto-conf.yaml</fileName>
                             <dictionaryName>presto-conf</dictionaryName>
                         </configFile>
-                    </configFiles> -->
+                    </configFiles>
                     <logs>
                         <log>
                             <logId>presto_coordinator</logId>
@@ -62,26 +62,26 @@
                     </packages>
                 </osSpecific>
             </osSpecifics>
-            <!--
+            
             <commandScript>
                 <script>scripts/service_check.py</script>
                 <scriptType>PYTHON</scriptType>
                 <timeout>300</timeout>
             </commandScript>
-            -->
+            
 
             <configuration-dependencies>
-                <config-type>flink-conf</config-type>
+                <config-type>presto-conf</config-type>
             </configuration-dependencies>
 
             <restartRequiredAfterChange>true</restartRequiredAfterChange>
 
-            <!--<quickLinksConfigurations>
+            <quickLinksConfigurations>
                 <quickLinksConfiguration>
                     <fileName>quicklinks.json</fileName>
                     <default>true</default>
                 </quickLinksConfiguration>
-            </quickLinksConfigurations>-->
+            </quickLinksConfigurations>
 
         </service>
     </services>

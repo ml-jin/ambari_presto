@@ -81,7 +81,7 @@ class PrestoMaster(Script):
 
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run", user='presto')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start", user='presto')
 
         # self.configure(env) # temperary not using
 
@@ -106,7 +106,7 @@ class PrestoMaster(Script):
         # Logger.info('Starting presto yarn session')
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run", user='presto')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start", user='presto')
 
     def status(self, env):
         raise ClientComponentHasNoStatus()
