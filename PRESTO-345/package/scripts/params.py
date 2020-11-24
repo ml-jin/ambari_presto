@@ -20,6 +20,7 @@ presto_conf = config['configurations']['presto-conf']
 presto_user = presto_conf['presto_user']
 presto_group = presto_conf['presto_group']
 presto_user = 'root'
+presto_root = 'root'
 
 presto_download_url = os.path.join(repoin.baseurl, 'presto', presto_TAR_NAME)
 

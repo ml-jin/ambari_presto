@@ -13,7 +13,7 @@ class PrestoMaster(Script):
     def install(self, env):
         import params
         # clean old folders
-        Execute("rm -rfv {0}".format(params.presto_base_dir), user=params.presto_user)
+        Execute("rm -rfv {0}".format(params.presto_base_dir), user=params.presto_root)
         
         Logger.info('Creating Presto group')
 
@@ -26,14 +26,24 @@ class PrestoMaster(Script):
         try:
             pwd.getpwnam(params.presto_user)
         except KeyError:
-            User(params.presto_user,
-                 gid=params.presto_group,
-                 groups=[params.presto_group],
-                 ignore_failures=True
-                 )
-
+            # User(params.presto_user,
+            #      gid=params.presto_group,
+            #      groups=[params.presto_group],
+            #      ignore_failures=True
+            #      )
+            Execute("useradd presto -m", user=params.root)
+        
         Logger.info('Creating presto install directory')
         Directory([params.presto_base_dir],
+                  mode=0755,
+                  cd_access='a',
+                  owner=params.presto_user,
+                  group=params.presto_group,
+                  create_parents=True
+                  )
+
+        Logger.info('Creating presto data directory')
+        Directory(['/home/presto/data_345'],
                   mode=0755,
                   cd_access='a',
                   owner=params.presto_user,
@@ -51,7 +61,7 @@ class PrestoMaster(Script):
                   )
 
         # activate java env
-        Execute("export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH".format(params.presto_jdk11_dest), user=params.presto_user)
+        Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format(params.presto_jdk11_dest), user=params.presto_user)
 
         # Execute("export JAVA_HOME={0}; export PATH=$JAVA_HOME/bin:$PATH".format(params.presto_jdk11_dest), user=params.presto_user)
 
@@ -70,8 +80,7 @@ class PrestoMaster(Script):
 
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
-        import os
-        os.system("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run")
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run", user='presto')
 
         # self.configure(env) # temperary not using
 
