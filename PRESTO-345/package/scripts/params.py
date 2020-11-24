@@ -24,7 +24,7 @@ presto_download_url = os.path.join(repoin.baseurl, 'presto', presto_TAR_NAME)
 
 presto_base_dir = presto_conf['presto_base_dir']
 
-presto_jdk11_source = os.path.join(repoin.baseurl, 'presto', presto_JDK_NAME)
+presto_jdk11_download_url = os.path.join(repoin.baseurl, 'presto', presto_JDK_NAME)
 presto_jdk11_dest = presto_conf['presto_destination']
 
 

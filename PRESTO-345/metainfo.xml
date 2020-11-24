@@ -4,7 +4,7 @@
     <services>
         <service>
             <name>PRESTO</name>
-            <displayName>PRESTO</displayName>
+            <displayName>Presto</displayName>
             <comment>一个基于内存分布式 MPP (Massive Parallel Processing) SQL交互式查询引擎。</comment>
             <version>345</version>
             <components>

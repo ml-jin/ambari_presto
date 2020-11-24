@@ -21,6 +21,7 @@ class PrestoMaster(Script):
             Group(params.presto_group)
 
         Logger.info('Creating Presto user')
+        
         try:
             pwd.getpwnam(params.presto_user)
         except KeyError:
@@ -69,12 +70,12 @@ class PrestoMaster(Script):
     def stop(self, env):
         import params
 
-        result = kill_yarn_application(params.presto_yarn_session_name)
+        result = kill_presto_application(params.presto_user)
 
         if result:
-            Logger.info('presto : {0} has been killed'.format(params.presto_yarn_session_name))
+            Logger.info('presto : {0} has been killed'.format(params.presto_user))
         else:
-            Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_yarn_session_name))
+            Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_user))
 
     def start(self, env):
         import params
@@ -83,7 +84,7 @@ class PrestoMaster(Script):
         self.configure(env)
 
         # Logger.info('Starting presto yarn session')
-        # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
+        # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_user, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
         os.system("/usr/hdp/3.0.1.0-187/presto/bin/launcher run")
         Logger.info('presto service started')
