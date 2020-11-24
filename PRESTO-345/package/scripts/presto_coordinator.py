@@ -43,13 +43,14 @@ class PrestoMaster(Script):
                   )
 
         Logger.info('Creating presto data directory')
-        Directory(['/home/presto/data_345'],
-                  mode=0755,
-                  cd_access='a',
-                  owner=params.presto_user,
-                  group=params.presto_group,
-                  create_parents=True
-                  )
+        Execute("mkdir -p /home/presto/data_345", user='presto')
+        # Directory(['/home/presto/data_345'],
+        #           mode=0755,
+        #           cd_access='a',
+        #           owner='presto',
+        #           group=params.presto_group,
+        #           create_parents=True
+        #           )
 
         Logger.info('Creating presto required jdk11+ directory')
         Directory([params.presto_jdk11_dest],
@@ -105,8 +106,7 @@ class PrestoMaster(Script):
         # Logger.info('Starting presto yarn session')
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
-        os.system("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run")
-        Logger.info('presto service started')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher run", user='presto')
 
     def status(self, env):
         raise ClientComponentHasNoStatus()
