@@ -3,7 +3,7 @@
 from resource_management import *
 from resource_management.core.exceptions import ClientComponentHasNoStatus
 from resource_management.core.logger import Logger
-from yarn_utils import *
+from p_utils import *
 
 
 class ServiceCheck(Script):

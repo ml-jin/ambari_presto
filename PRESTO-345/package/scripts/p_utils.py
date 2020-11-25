@@ -11,7 +11,7 @@ def get_presto_id(yarn_application_name):
     return output
 
 
-def kill_yarn_application(yarn_application_name):
+def kill_presto_application(yarn_application_name):
     application_id = get_presto_id()
     commands.getoutput('kill -9 {0}'.format(application_id))
     return True

@@ -11,7 +11,7 @@
                 <component>
                     <name>PRESTO_COORDINATOR</name>
                     <displayName>PRESTO Coordinator</displayName>
-                    <category>CLIENT</category>
+                    <category>MASTER</category>
                     <cardinality>1+</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <commandScript>

@@ -12,13 +12,13 @@
         "name": "presto_ui",
         "label": "PRESTO UI",
         "requires_user_name": "false",
-        "component_name": "PRESTO_MASTER",
+        "component_name": "PRESTO_COORDINATOR",
         "url":"%@://%@:%@",
         "port":{
           "http_property": "http_port",
-          "http_default_port": "30085",
+          "http_default_port": "30088",
           "https_property": "http_port",
-          "https_default_port": "30085",
+          "https_default_port": "30088",
           "regex": "\\w*:(\\d+)",
           "site": "elastic-config"
         }

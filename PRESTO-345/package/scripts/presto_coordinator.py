@@ -90,7 +90,7 @@ class PrestoMaster(Script):
     def stop(self, env):
         import params
 
-        result = kill_yarn_application(params.presto_yarn_session_name)
+        result = kill_presto_application(params.presto_yarn_session_name)
 
         if result:
             Logger.info('presto : {0} has been killed'.format(params.presto_yarn_session_name))
