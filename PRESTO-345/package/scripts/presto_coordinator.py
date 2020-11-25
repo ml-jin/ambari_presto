@@ -13,7 +13,7 @@ class PrestoMaster(Script):
     def install(self, env):
         import params
         # clean old folders
-        Execute("rm -rfv {0}".format(params.presto_base_dir), user=params.presto_root)
+        Execute("rm -rfv {0}".format(params.presto_base_dir), user='root')
         
         Logger.info('Creating Presto group')
 
@@ -31,7 +31,7 @@ class PrestoMaster(Script):
             #      groups=[params.presto_group],
             #      ignore_failures=True
             #      )
-            Execute("useradd presto -m -g presto", user=params.presto_root)
+            Execute("useradd presto -m -g presto", user='root')
         
         Logger.info('Creating presto install directory')
         Directory([params.presto_base_dir],
@@ -99,7 +99,7 @@ class PrestoMaster(Script):
 
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format('coor.pid',params.presto_log_launcher, params.presto_log_server), user='presto')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format('coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
 
         # self.configure(env) # temperary not using
 
@@ -153,7 +153,7 @@ class PrestoMaster(Script):
         # Logger.info('Starting presto yarn session')
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='presto')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
 
     def status(self, env):
         #raise ClientComponentHasNoStatus()
