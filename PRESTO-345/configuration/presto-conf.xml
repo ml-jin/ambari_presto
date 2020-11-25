@@ -24,7 +24,7 @@
 
     <property>
         <name>presto_group</name>
-        <value>presto</value>
+        <value>hadoop</value>
         <display-name>presto Group</display-name>
         <description>presto 组名</description>
     </property>
@@ -34,6 +34,13 @@
         <value>presto</value>
         <display-name>presto user</display-name>
         <description>presto 用户名</description>
+    </property>
+
+    <property>
+        <name>presto_root</name>
+        <value>root</value>
+        <display-name>presto root</display-name>
+        <description>root 用户名</description>
     </property>
 
     <property>

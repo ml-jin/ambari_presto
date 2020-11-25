@@ -31,7 +31,7 @@ class PrestoMaster(Script):
             #      groups=[params.presto_group],
             #      ignore_failures=True
             #      )
-            Execute("useradd presto -m -g presto", user=params.root)
+            Execute("useradd presto -m -g presto", user=params.presto_root)
         
         Logger.info('Creating presto install directory')
         Directory([params.presto_base_dir],
