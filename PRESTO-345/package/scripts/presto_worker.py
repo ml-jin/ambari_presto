@@ -13,7 +13,7 @@ class PrestoWorker(Script):
     def install(self, env):
         import params
         # clean old folders
-        Execute("rm -rfv {0}".format(params.presto_base_dir), user='root')
+        Execute("rm -rfv {0}".format('/home/presto/worker'), user='root')
         
         Logger.info('Creating Presto group')
 
@@ -24,14 +24,9 @@ class PrestoWorker(Script):
 
         Logger.info('Creating Presto user')
         try:
-            pwd.getpwnam(params.presto_user)
+            pwd.getpwnam('presto')
         except KeyError:
-            # User(params.presto_user,
-            #      gid=params.presto_group,
-            #      groups=[params.presto_group],
-            #      ignore_failures=True
-            #      )
-            Execute("useradd presto -m -g presto", user='root')
+            Execute("useradd presto -m -g hadoop", user='root')
         
         Logger.info('Creating presto install directory')
         Directory(['/home/presto/worker'],
