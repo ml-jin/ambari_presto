@@ -36,6 +36,12 @@
         <description>presto 用户名</description>
     </property>
 
+    <property>
+        <name>presto.pid.dir</name>
+        <value>/var/run/presto</value>
+        <display-name>Presto Pid Directory</display-name>
+        <description>Presto pid file directory.</description>
+    </property>
 <!--     <property>
         <name>presto_source</name>
         <value>/usr/hdp/3.0.1.0-187/presto/presto-server-345/jdk11</value>

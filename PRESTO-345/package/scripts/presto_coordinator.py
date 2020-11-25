@@ -90,12 +90,16 @@ class PrestoMaster(Script):
     def stop(self, env):
         import params
 
-        result = kill_presto_application(params.presto_yarn_session_name)
+        result = kill_presto_application(params.presto_group)
 
         if result:
-            Logger.info('presto : {0} has been killed'.format(params.presto_yarn_session_name))
+            Logger.info('presto : {0} has been killed'.format(params.presto_group))
         else:
-            Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_yarn_session_name))
+            Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_group))
+        # File(pid_file,
+        #      action="delete"
+        #      )
+        return True
 
     def start(self, env):
         import params
@@ -109,7 +113,13 @@ class PrestoMaster(Script):
         Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start", user='presto')
 
     def status(self, env):
-        raise ClientComponentHasNoStatus()
+        #raise ClientComponentHasNoStatus()
+        import status_params
+        env.set_params(status_params)
+
+        # Use built-in method to check status using pidfile
+        # check_process_status(status_params.es_master_pid_file)
+        return True
 
     def configure(self, env):
         import params

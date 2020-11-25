@@ -29,6 +29,11 @@ presto_base_dir = presto_conf['presto_base_dir']
 presto_jdk11_download_url = os.path.join(repoin.baseurl, 'presto', presto_JDK_NAME)
 presto_jdk11_dest = presto_conf['presto_destination']
 
+# pid - coordinator
+presto_coor_pid_dir = presto_conf['presto.pid.dir'] + '/coor'
+presto_worker_pid_dir = presto_conf['presto.pid.dir'] + '/worker'
+
+
 
 # Common
 
