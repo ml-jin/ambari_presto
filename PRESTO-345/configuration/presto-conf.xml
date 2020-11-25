@@ -42,6 +42,13 @@
         <display-name>Presto Pid Directory</display-name>
         <description>Presto pid file directory.</description>
     </property>
+
+    <property>
+        <name>presto.path.logs</name>
+        <value>/var/log/presto</value>
+        <display-name>Path Log</display-name>
+        <description>Path to directory where to store the logs.</description>
+    </property>
 <!--     <property>
         <name>presto_source</name>
         <value>/usr/hdp/3.0.1.0-187/presto/presto-server-345/jdk11</value>

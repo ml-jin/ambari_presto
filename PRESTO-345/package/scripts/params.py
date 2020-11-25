@@ -34,6 +34,12 @@ presto_coor_pid_dir = presto_conf['presto.pid.dir'] + '/coor'
 presto_worker_pid_dir = presto_conf['presto.pid.dir'] + '/worker'
 
 
+# logs
+presto_log_dir = presto_conf['presto.path.logs']
+presto_log_launcher = presto_log_dir + '/launcher.log'
+presto_log_server = presto_log_dir + '/server.log'
+
+
 
 # Common
 
