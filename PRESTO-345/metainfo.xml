@@ -33,24 +33,24 @@
                         </log>
                     </logs>
                 </component>
-                <!--<component>
-                    <name>FLINK_SLAVE</name>
-                    <displayName>Flink Slave</displayName>
+                <component>
+                    <name>PRESTO_SLAVE</name>
+                    <displayName>Presto worker</displayName>
                     <category>SLAVE</category>
                     <cardinality>0+</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <commandScript>
-                        <script>scripts/flink_slave.py</script>
+                        <script>scripts/presto_worker.py</script>
                         <scriptType>PYTHON</scriptType>
                         <timeout>1200</timeout>
                     </commandScript>
                     <logs>
                         <log>
-                            <logId>flink_slave</logId>
+                            <logId>presto_slave</logId>
                             <primary>true</primary>
                         </log>
                     </logs>
-                </component>-->
+                </component>
             </components>
             <osSpecifics>
                 <osSpecific>
