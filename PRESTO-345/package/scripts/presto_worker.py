@@ -105,7 +105,7 @@ class PrestoWorker(Script):
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
         
-        Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='root')
+        Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='presto')
         
         Logger.info('presto installation completed')
 
@@ -158,7 +158,8 @@ class PrestoWorker(Script):
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
         # Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
-
+        Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='presto')
+        
     def status(self, env):
         #raise ClientComponentHasNoStatus()
         import status_params
