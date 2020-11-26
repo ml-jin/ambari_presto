@@ -76,7 +76,7 @@ class PrestoWorker(Script):
 
         # activate java env
         Execute("cd ~ && echo \"JAVA_HOME={0}/jdk-11.0.9\" >> .bash_profile".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
-        Execute("cd ~ && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
+        Execute("cd ~ && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile", user='presto')
 
 
         Execute("chmod -R 777 /home/presto", user=params.presto_user)
@@ -97,14 +97,16 @@ class PrestoWorker(Script):
 
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
-        Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='root')
+        # Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='root')
 
         # self.configure(env) # temperary not using
         # generate worker uuid, and change configs
         import os
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
-
+        
+        Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='root')
+        
         Logger.info('presto installation completed')
 
     def stop(self, env):
