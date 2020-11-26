@@ -43,7 +43,7 @@ class PrestoMaster(Script):
                   )
 
         Logger.info('Creating presto data directory')
-        Execute("mkdir -p /home/presto/data_345", user='presto')
+        Execute("mkdir -p /home/presto/data_345", user='root')
         # Directory(['/home/presto/data_345'],
         #           mode=0755,
         #           cd_access='a',
@@ -81,6 +81,9 @@ class PrestoMaster(Script):
 
         # activate java env
         Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format(params.presto_jdk11_dest), user=params.presto_user)
+        
+
+        Execute("chmod -R 777 /home/presto", user=params.presto_user)
 
         # Execute("export JAVA_HOME={0}; export PATH=$JAVA_HOME/bin:$PATH".format(params.presto_jdk11_dest), user=params.presto_user)
 
