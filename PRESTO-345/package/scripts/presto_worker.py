@@ -38,7 +38,7 @@ class PrestoWorker(Script):
                   )
 
         Logger.info('Creating presto data directory')
-        Execute("mkdir -p /home/presto/worker/data_345", user='presto')
+        Execute("mkdir -p /home/presto/worker/data_345", user=params.presto_user)
         # Directory(['/home/presto/data_345'],
         #           mode=0755,
         #           cd_access='a',
@@ -75,8 +75,9 @@ class PrestoWorker(Script):
         #           )
 
         # activate java env
-        Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format('/home/presto/worker/presto-server-345/jdk11'), user=params.presto_user)
+        Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
 
+        Execute("chmod -R 777 /home/presto", user=params.presto_user)
         # Execute("export JAVA_HOME={0}; export PATH=$JAVA_HOME/bin:$PATH".format(params.presto_jdk11_dest), user=params.presto_user)
 
         Logger.info('Downloading jdk binaries')
