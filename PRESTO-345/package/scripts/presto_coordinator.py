@@ -80,8 +80,10 @@ class PrestoMaster(Script):
                   )
 
         # activate java env
-        Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format(params.presto_jdk11_dest), user=params.presto_user)
-        
+        #Execute("echo \"export JAVA_HOME={0}/jdk-11.0.9; export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile".format(params.presto_jdk11_dest), user=params.presto_user)
+        Execute("cd ~ && echo \"JAVA_HOME={0}/jdk-11.0.9\" >> .bashrc".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
+        Execute("cd ~ && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> .bashrc", user='presto')
+
 
         Execute("chmod -R 777 /home/presto", user=params.presto_user)
 

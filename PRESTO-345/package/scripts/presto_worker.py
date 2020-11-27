@@ -75,9 +75,8 @@ class PrestoWorker(Script):
         #           )
 
         # activate java env
-        Execute("cd ~ && echo \"JAVA_HOME={0}/jdk-11.0.9\" >> .bash_profile".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
-        Execute("cd ~ && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> .bash_profile", user='presto')
-
+        Execute("cd ~ && echo \"JAVA_HOME={0}/jdk-11.0.9\" >> .bashrc".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
+        Execute("cd ~ && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> .bashrc", user='presto')
 
         Execute("chmod -R 777 /home/presto", user=params.presto_user)
         # Execute("export JAVA_HOME={0}; export PATH=$JAVA_HOME/bin:$PATH".format(params.presto_jdk11_dest), user=params.presto_user)
@@ -159,7 +158,7 @@ class PrestoWorker(Script):
         # Execute(cmd, user=params.presto_user)
         # Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
         Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='presto')
-        
+
     def status(self, env):
         #raise ClientComponentHasNoStatus()
         import status_params
