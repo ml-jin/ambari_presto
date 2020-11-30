@@ -8,7 +8,8 @@ from p_utils import *
 
 class ServiceCheck(Script):
     def service_check(self, env):
-        raise ClientComponentHasNoStatus()
+        # raise ClientComponentHasNoStatus()
+        return True
 
 
 if __name__ == "__main__":

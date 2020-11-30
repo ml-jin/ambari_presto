@@ -100,10 +100,12 @@ class PrestoWorker(Script):
 
         # self.configure(env) # temperary not using
         # generate worker uuid, and change configs
+        
         import os
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
-        
+        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
+
         Execute("/home/presto/worker/presto-server-345/bin/launcher start ", user='presto')
         
         Logger.info('presto installation completed')
