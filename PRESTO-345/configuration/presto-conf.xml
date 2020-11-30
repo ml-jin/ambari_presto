@@ -23,6 +23,13 @@
     </property>
 
     <property>
+        <name>presto_coordinator_ip</name>
+        <value>{master_id}</value>
+        <display-name>presto master ip</display-name>
+        <description>presto master ip address</description>
+    </property>
+
+    <property>
         <name>presto_group</name>
         <value>hadoop</value>
         <display-name>presto Group</display-name>
