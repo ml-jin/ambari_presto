@@ -9,7 +9,11 @@ from p_utils import *
 class ServiceCheck(Script):
     def service_check(self, env):
         # raise ClientComponentHasNoStatus()
-        return True
+        output = commands.getoutput('pgrep presto')
+        if output > 0:
+    		return True
+    	else:
+    		return False
 
 
 if __name__ == "__main__":
