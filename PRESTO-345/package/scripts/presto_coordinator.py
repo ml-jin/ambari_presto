@@ -104,6 +104,10 @@ class PrestoMaster(Script):
 
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
+        
+        import os
+        os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
+
         Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties'".format('coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
 
         # self.configure(env) # temperary not using
