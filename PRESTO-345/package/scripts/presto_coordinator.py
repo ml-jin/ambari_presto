@@ -108,9 +108,12 @@ class PrestoMaster(Script):
         import os
         os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
 
+        #Execute("cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i \"s/discovery.uri=/discovery.uri=http://{0}:30088/g\" config.properties"format(params.presto_master_ip), user='root')
+        self.configure(env)
         Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties'".format('coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
 
-        # self.configure(env) # temperary not using
+        # modify properties file
+        self.configure(env) # temperary not using
 
         Logger.info('presto installation completed')
 
@@ -179,11 +182,11 @@ class PrestoMaster(Script):
         Logger.info('Configuring presto')
         env.set_params(params)
 
-        # File("{0}/{1}/conf/presto-conf.yaml".format(params.presto_base_dir, presto_DIR_NAME),
-        #      content=Template("presto-conf.yaml.j2"),
-        #      owner=params.presto_user,
-        #      group=params.presto_group
-        #      )
+        File("/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties11",
+             content=Template("presto-conf.yaml.j2"),
+             owner=params.presto_user,
+             group=params.presto_group
+             )
 
 
 if __name__ == '__main__':

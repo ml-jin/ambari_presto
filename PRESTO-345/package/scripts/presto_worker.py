@@ -102,10 +102,11 @@ class PrestoWorker(Script):
         # generate worker uuid, and change configs
         
         import os
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties && chmod -R 777 /home/presto')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g" config.properties')
+        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g\" node.properties ", user = 'root')
+        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/coordinator=true/coordinator=false/g\" config.properties && sed -i \"s/discovery-server.enabled/#discovery-server.enabled/g\" config.properties", user = 'root')
+        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g\" config.properties && chmod -R 777 /home/presto", user = 'root')
+        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g\" config.properties", user = 'root')
+        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/discovery.uri=/discovery.uri=http://{0}:30088/g\" config.properties"format(params.presto_master_ip), user='root')
 
         Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start", user='presto')
         

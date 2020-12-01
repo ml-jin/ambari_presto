@@ -39,6 +39,9 @@ presto_log_dir = presto_conf['presto.path.logs']
 presto_log_launcher = presto_log_dir + '/launcher.log'
 presto_log_server = presto_log_dir + '/server.log'
 
+# master ip
+
+presto_master_ip = presto_conf['presto_coordinator_ip']
 
 
 # Common

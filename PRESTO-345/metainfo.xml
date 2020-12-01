@@ -22,8 +22,8 @@
                     <configFiles>
                         <configFile>
                             <type>env</type>
-                            <fileName>presto-conf.yaml</fileName>
-                            <dictionaryName>presto-conf</dictionaryName>
+                            <fileName>config.properties11</fileName>
+<!--                             <dictionaryName>presto-conf</dictionaryName> -->
                         </configFile>
                     </configFiles>
                     <logs>
