@@ -172,13 +172,13 @@ class PrestoMaster(Script):
         # raise ClientComponentHasNoStatus()
         # import status_params
         # env.set_params(status_params)
-        import os 
-        if os.path.isfile(params.presto_coor_pid_dir + '/coor.pid'):
-          return True
-        else:
-          return False
+        # import os 
+        # if os.path.isfile(params.presto_coor_pid_dir + '/coor.pid'):
+        #   return True
+        # else:
+        #   return False
         # Use built-in method to check status using pidfile
-        # check_process_status(params.presto_coor_pid_dir + '/coor.pid')
+        check_process_status(params.presto_coor_pid_dir + '/coor.pid')
         
 
     def configure(self, env):

@@ -102,11 +102,11 @@ class PrestoWorker(Script):
         # generate worker uuid, and change configs
         
         import os
-        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g\" node.properties ", user = 'root')
-        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/coordinator=true/coordinator=false/g\" config.properties && sed -i \"s/discovery-server.enabled/#discovery-server.enabled/g\" config.properties", user = 'root')
-        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g\" config.properties && chmod -R 777 /home/presto", user = 'root')
-        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g\" config.properties", user = 'root')
-        Execute("cd /home/presto/worker/presto-server-345/etc/ && sed -i \"s/discovery.uri=/discovery.uri=http://{0}:30088/g\" config.properties"format(params.presto_master_ip), user='root')
+        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
+        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
+        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties && chmod -R 777 /home/presto')
+        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g" config.properties')
+        os.system(format('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=/discovery.uri=http://{params.presto_master_ip}:30088/g" config.properties'))
 
         Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start", user='presto')
         
@@ -122,7 +122,7 @@ class PrestoWorker(Script):
         # else:
         #     Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_group))
         import os
-        os.system("kill -9 $(pgrep presto)")
+        os.system('kill -9 $(pgrep presto)')
         # pid_file = params.presto_coor_pid_dir + '/coor.pid'
         # pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read()
 
@@ -163,6 +163,7 @@ class PrestoWorker(Script):
         # Execute(cmd, user=params.presto_user)
         # Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
         Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start", user='presto')
+        Logger.info('presto start process completed')
 
     def status(self, env):
         raise ClientComponentHasNoStatus()
@@ -177,6 +178,7 @@ class PrestoWorker(Script):
         import params
 
         Logger.info('Configuring presto')
+        Logger.info('Configure presto worker complete')
         # env.set_params(params)
 
         # File("{0}/{1}/conf/presto-conf.yaml".format(params.presto_base_dir, presto_DIR_NAME),
