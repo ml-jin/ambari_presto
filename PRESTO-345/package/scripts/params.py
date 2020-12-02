@@ -42,6 +42,8 @@ presto_log_server = presto_log_dir + '/server.log'
 # master ip
 
 presto_master_ip = presto_conf['presto_coordinator_ip']
+# presto port
+presto_http_server_http_port = presto_conf['http-server.http.port']
 
 # memory usage
 presto_query_max_memory = presto_conf['query.max-memory']

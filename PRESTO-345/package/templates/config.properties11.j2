@@ -32,12 +32,16 @@
 
 coordinator=true
 node-scheduler.include-coordinator=true
-http-server.http.port=30088
+
+{% if presto_http_server_http_port != 'none' %}
+http-server.http.port={{presto_http_server_http_port}}
+{% endif %}
+
 discovery-server.enabled=true
 
 # test ip address;
-{% if presto_master_ip != 'none' %}
-discovery.uri={{presto_master_ip}}
+{% if presto_master_ip != 'none' and presto_http_server_http_port != '' %}
+discovery.uri=http://{{presto_master_ip}}:{{presto_http_server_http_port}}
 {% endif %}
 
 # query quota
