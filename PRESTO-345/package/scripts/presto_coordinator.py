@@ -106,11 +106,11 @@ class PrestoMaster(Script):
         # Logger.info('Creating symbolic links')
         # create_symbolic_link()
         
-        import os
-        os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
+        #import os
+        #os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
 
-        os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=/discovery.uri=http://{0}:30088/g" config.properties')
-        #self.configure(env)
+        #os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=/discovery.uri=http://{0}:30088/g" config.properties')
+        self.configure(env)
         Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
 
         # modify properties file
@@ -120,7 +120,10 @@ class PrestoMaster(Script):
 
     def stop(self, env):
         import params
-
+        import os
+        os.system('kill -9 $(pgrep presto)')
+        os.system('rm -rf /var/run/presto/coor/coor.id')
+        Logger.info('Presto coor server stop completed')
         # result = kill_presto_application(params.presto_group)
 
         # if result:
@@ -128,33 +131,33 @@ class PrestoMaster(Script):
         # else:
         #     Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_group))
         
-        pid_file = params.presto_coor_pid_dir + '/coor.pid'
-        pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read().strip()
+        # pid_file = params.presto_coor_pid_dir + '/coor.pid'
+        # pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read().strip()
 
-        process_id_exists_command = format("ls {pid_file} >/dev/null 2>&1 && ps -p {pid} >/dev/null 2>&1")
+        # process_id_exists_command = format("ls {pid_file} >/dev/null 2>&1 && ps -p {pid} >/dev/null 2>&1")
 
-        kill_cmd = format("kill {pid}")
-        Execute(kill_cmd,
-                not_if=format("! ({process_id_exists_command})"))
-        wait_time = 5
+        # kill_cmd = format("kill {pid}")
+        # Execute(kill_cmd,
+        #         not_if=format("! ({process_id_exists_command})"))
+        # wait_time = 5
 
-        hard_kill_cmd = format("kill -9 {pid}")
-        Execute(hard_kill_cmd,
-                not_if=format(
-                    "! ({process_id_exists_command}) || ( sleep {wait_time} && ! ({process_id_exists_command}) )"),
-                ignore_failures=True)
-        try:
-            Execute(format("! ({process_id_exists_command})"),
-                    tries=20,
-                    try_sleep=3,
-                    )
-        except:
-            show_logs(params.presto_log_dir, params.presto_user)
-            raise
+        # hard_kill_cmd = format("kill -9 {pid}")
+        # Execute(hard_kill_cmd,
+        #         not_if=format(
+        #             "! ({process_id_exists_command}) || ( sleep {wait_time} && ! ({process_id_exists_command}) )"),
+        #         ignore_failures=True)
+        # try:
+        #     Execute(format("! ({process_id_exists_command})"),
+        #             tries=20,
+        #             try_sleep=3,
+        #             )
+        # except:
+        #     show_logs(params.presto_log_dir, params.presto_user)
+        #     raise
 
-        File(pid_file,
-             action="delete"
-             )
+        # File(pid_file,
+        #      action="delete"
+        #      )
         
 
     def start(self, env):
@@ -166,7 +169,10 @@ class PrestoMaster(Script):
         # Logger.info('Starting presto yarn session')
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
+        import os 
+        if os.system('pgrep presto') != 0:
+          Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
+        Logger.info('start process finished, succssfully start')
 
     def status(self, env):
         # raise ClientComponentHasNoStatus()
