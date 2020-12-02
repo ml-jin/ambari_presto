@@ -167,17 +167,17 @@ class PrestoWorker(Script):
     def status(self, env):
         raise ClientComponentHasNoStatus()
         # import status_params
-        # #env.set_params(status_params)
+        # env.set_params(status_params)
 
-        # # Use built-in method to check status using pidfile
-        # #check_process_status(params.presto_coor_pid_dir + '/coor.pid')
+        # Use built-in method to check status using pidfile
+        # check_process_status(params.presto_coor_pid_dir + '/coor.pid')
         # return False
 
     def configure(self, env):
         import params
 
         Logger.info('Configuring presto')
-        env.set_params(params)
+        # env.set_params(params)
 
         # File("{0}/{1}/conf/presto-conf.yaml".format(params.presto_base_dir, presto_DIR_NAME),
         #      content=Template("presto-conf.yaml.j2"),

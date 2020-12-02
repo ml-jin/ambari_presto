@@ -30,17 +30,26 @@
 # automatically configure the host name based on the hostname of the node where the
 # JobManager runs.
 
-#{% if jobmanager_rpc_address != 'none' %}
-#jobmanager.rpc.address: {{jobmanager_rpc_address}}
-#{% endif %}
-
-# The RPC port where the JobManager is reachable.
-
-# jobmanager.rpc.port: {{jobmanager_rpc_port}}
-
+coordinator=true
+node-scheduler.include-coordinator=true
+http-server.http.port=30088
+discovery-server.enabled=true
 
 # test ip address;
 {% if presto_master_ip != 'none' %}
 discovery.uri={{presto_master_ip}}
+{% endif %}
+
+# query quota
 {% if presto_master_ip != 'none' %}
+query.max-memory={{presto_query_max_memory}}
+{% endif %}
+
+{% if presto_query_max_memory_per_node != 'none' %}
+query.max-memory-per-node={{presto_query_max_memory_per_node}}
+{% endif %}
+
+{% if presto_query_max_total_memory_per_ndoe != 'none' %}
+query.max-total-memory-per-node={{presto_query_max_total_memory_per_ndoe}}
+{% endif %}
 

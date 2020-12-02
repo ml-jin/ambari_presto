@@ -63,6 +63,49 @@
         <display-name>Path Log</display-name>
         <description>Path to directory where to store the logs.</description>
     </property>
+
+    <property>
+        <name>node-scheduler.include-coordinator</name>
+        <value>true</value>
+        <display-name>weather include coor as worker</display-name>
+        <description>weather include coor as worker</description>
+    </property>
+
+    <property>
+        <name>http-server.http.port</name>
+        <value>30088</value>
+        <display-name>presto http port</display-name>
+        <description>presto http port</description>
+    </property>
+
+    <property>
+        <name>query.max-memory</name>
+        <value>5GB</value>
+        <display-name> query max memory </display-name>
+        <description> query max memory </description>
+    </property>
+
+    <property>
+        <name>query.max-memory-per-node</name>
+        <value>1GB</value>
+        <display-name> query max memory per node</display-name>
+        <description> query max memory per node </description>
+    </property>
+
+    <property>
+        <name>query.max-total-memory-per-node</name>
+        <value>2GB</value>
+        <display-name> query max total memory per node</display-name>
+        <description> query max total memory per node </description>
+    </property>
+
+    <property>
+        <name>discovery-server.enabled</name>
+        <value>true</value>
+        <display-name> discovery server enabled</display-name>
+        <description> discovery server enabled </description>
+    </property>
+
 <!--     <property>
         <name>presto_source</name>
         <value>/usr/hdp/3.0.1.0-187/presto/presto-server-345/jdk11</value>

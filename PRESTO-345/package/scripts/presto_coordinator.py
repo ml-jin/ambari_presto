@@ -3,6 +3,7 @@
 from resource_management import *
 from resource_management.core.exceptions import ClientComponentHasNoStatus
 from resource_management.core.logger import Logger
+from resource_management.libraries.functions import check_process_status
 from p_utils import *
 from presto_utils import *
 import pwd,grp
@@ -108,9 +109,9 @@ class PrestoMaster(Script):
         import os
         os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties')
 
-        #Execute("cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i \"s/discovery.uri=/discovery.uri=http://{0}:30088/g\" config.properties"format(params.presto_master_ip), user='root')
-        self.configure(env)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties'".format('coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
+        os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=/discovery.uri=http://{0}:30088/g" config.properties')
+        #self.configure(env)
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
 
         # modify properties file
         self.configure(env) # temperary not using
@@ -128,7 +129,7 @@ class PrestoMaster(Script):
         #     Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_group))
         
         pid_file = params.presto_coor_pid_dir + '/coor.pid'
-        pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read()
+        pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read().strip()
 
         process_id_exists_command = format("ls {pid_file} >/dev/null 2>&1 && ps -p {pid} >/dev/null 2>&1")
 
@@ -151,7 +152,7 @@ class PrestoMaster(Script):
             show_logs(params.presto_log_dir, params.presto_user)
             raise
 
-        File(params.presto_coor_pid_dir + '/coor.pid',
+        File(pid_file,
              action="delete"
              )
         
@@ -165,15 +166,19 @@ class PrestoMaster(Script):
         # Logger.info('Starting presto yarn session')
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties'".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
 
     def status(self, env):
-        #raise ClientComponentHasNoStatus()
-        import status_params
-        env.set_params(status_params)
-
+        # raise ClientComponentHasNoStatus()
+        # import status_params
+        # env.set_params(status_params)
+        import os 
+        if os.path.isfile(params.presto_coor_pid_dir + '/coor.pid'):
+          return True
+        else:
+          return False
         # Use built-in method to check status using pidfile
-        check_process_status(params.presto_coor_pid_dir + '/coor.pid')
+        # check_process_status(params.presto_coor_pid_dir + '/coor.pid')
         
 
     def configure(self, env):
@@ -182,7 +187,7 @@ class PrestoMaster(Script):
         Logger.info('Configuring presto')
         env.set_params(params)
 
-        File("/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config.properties11",
+        File("/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties",
              content=Template("config.properties11.j2"),
              owner=params.presto_user,
              group=params.presto_group

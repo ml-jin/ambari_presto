@@ -43,6 +43,11 @@ presto_log_server = presto_log_dir + '/server.log'
 
 presto_master_ip = presto_conf['presto_coordinator_ip']
 
+# memory usage
+presto_query_max_memory = presto_conf['query.max-memory']
+presto_query_max_memory_per_node = presto_conf['query.max-memory-per-node']
+presto_query_max_total_memory_per_ndoe = presto_conf['query.max-total-memory-per-node']
+
 
 # Common
 
