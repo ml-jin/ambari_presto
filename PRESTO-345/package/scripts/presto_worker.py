@@ -7,8 +7,8 @@ from p_utils import *
 from presto_utils import *
 import pwd,grp
 
-import os
-UUID = os.system('uuidgen')
+import uuid
+UUID = str(uuid.uuid1())
 class PrestoWorker(Script):
 
     def install(self, env):
@@ -58,8 +58,8 @@ class PrestoWorker(Script):
                   )
 
         Logger.info('Creating presto required pid directory')
-        Directory([params.presto_coor_pid_dir],
-                  mode=0755,
+        Directory([params.presto_worker_pid_dir],
+                  mode=0777,
                   cd_access='a',
                   owner=params.presto_user,
                   group=params.presto_group,
@@ -108,7 +108,7 @@ class PrestoWorker(Script):
         #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties && chmod -R 777 /home/presto')
         #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g" config.properties')
         #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=/discovery.uri=http:\/\/'+ params.presto_master_ip + ':30088/g" config.properties')
-
+        # os.system('chmod -R 777 /var/run/presto')
         self.configure(env)
         Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(UUID), user='presto')
         
@@ -175,7 +175,7 @@ class PrestoWorker(Script):
         # env.set_params(status_params)
 
         # Use built-in method to check status using pidfilcde
-        check_process_status(params.presto_coor_pid_dir + '/coor.pid')
+        check_process_status("/var/run/presto/worker/worker{0}.id".format(UUID) )
         # return False
 
     def configure(self, env):

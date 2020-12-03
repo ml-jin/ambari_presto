@@ -68,7 +68,8 @@ class PrestoMaster(Script):
                   cd_access='a',
                   owner=params.presto_user,
                   group=params.presto_group,
-                  create_parents=True
+                  create_parents=True,
+                  recursive_ownership=True
                   )
 
         Logger.info('Creating presto required logs directory')
@@ -182,7 +183,6 @@ class PrestoMaster(Script):
         #   raise ComponentIsNotRunning()
         # Use built-in method to check status using pidfile v1
         check_process_status('/var/run/presto/coor/coor.id')
-        :q
 
     def configure(self, env):
         import params
