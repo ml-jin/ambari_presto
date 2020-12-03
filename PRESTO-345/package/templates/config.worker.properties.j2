@@ -1,0 +1,59 @@
+################################################################################
+#  Licensed to the Apache Software Foundation (ASF) under one
+#  or more contributor license agreements.  See the NOTICE file
+#  distributed with this work for additional information
+#  regarding copyright ownership.  The ASF licenses this file
+#  to you under the Apache License, Version 2.0 (the
+#  "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+# limitations under the License.
+################################################################################
+
+
+#==============================================================================
+# Common
+#==============================================================================
+
+# The external address of the host on which the JobManager runs and can be
+# reached by the TaskManagers and any clients which want to connect. This setting
+# is only used in Standalone mode and may be overwritten on the JobManager side
+# by specifying the --host <hostname> parameter of the bin/jobmanager.sh executable.
+# In high availability mode, if you use the bin/start-cluster.sh script and setup
+# the conf/masters file, this will be taken care of automatically. Yarn/Mesos
+# automatically configure the host name based on the hostname of the node where the
+# JobManager runs.
+
+coordinator=false
+#node-scheduler.include-coordinator=false
+
+{% if presto_http_server_http_port != 'none' %}
+http-server.http.port={{presto_http_server_http_port}}
+{% endif %}
+
+discovery-server.enabled=true
+
+# test ip address;
+{% if presto_master_ip != 'none' and presto_http_server_http_port != '' %}
+discovery.uri=http://{{presto_master_ip}}:{{presto_http_server_http_port}}
+{% endif %}
+
+# query quota
+{% if presto_master_ip != 'none' %}
+query.max-memory={{presto_query_max_memory}}
+{% endif %}
+
+{% if presto_query_max_memory_per_node != 'none' %}
+query.max-memory-per-node={{presto_query_max_memory_per_node}}
+{% endif %}
+
+{% if presto_query_max_total_memory_per_ndoe != 'none' %}
+query.max-total-memory-per-node={{presto_query_max_total_memory_per_ndoe}}
+{% endif %}
+

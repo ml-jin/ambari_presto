@@ -36,7 +36,7 @@
                 <component>
                     <name>PRESTO_SLAVE</name>
                     <displayName>Presto worker</displayName>
-                    <category>CLIENT</category>
+                    <category>SLAVE</category>
                     <cardinality>0+</cardinality>
                     <versionAdvertised>true</versionAdvertised>
                     <commandScript>

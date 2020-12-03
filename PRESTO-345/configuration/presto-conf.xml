@@ -24,7 +24,7 @@
 
     <property>
         <name>presto_coordinator_ip</name>
-        <value>{master_id}</value>
+        <value></value>
         <display-name>presto master ip</display-name>
         <description>presto master ip address</description>
     </property>

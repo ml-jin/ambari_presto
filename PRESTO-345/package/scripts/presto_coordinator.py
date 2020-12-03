@@ -111,10 +111,7 @@ class PrestoMaster(Script):
 
         #os.system('cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/etc && sed -i "s/discovery.uri=/discovery.uri=http://{0}:30088/g" config.properties')
         self.configure(env)
-        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
-
-        # modify properties file
-        self.configure(env) # temperary not using
+        Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file=/var/run/presto/coor/coor.id  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $(pgrep presto) > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
 
         Logger.info('presto installation completed')
 
@@ -171,7 +168,7 @@ class PrestoMaster(Script):
         # Execute(cmd, user=params.presto_user)
         import os 
         if os.system('pgrep presto') != 0:
-          Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $! > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
+          Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --pid-file=/var/run/presto/coor/coor.id  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $(pgrep presto) > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
         Logger.info('start process finished, succssfully start')
 
     def status(self, env):
@@ -180,12 +177,12 @@ class PrestoMaster(Script):
         # env.set_params(status_params)
         # import os 
         # if os.path.isfile(params.presto_coor_pid_dir + '/coor.pid'):
-        #   return True
+        #   pass
         # else:
-        #   return False
-        # Use built-in method to check status using pidfile
-        check_process_status(params.presto_coor_pid_dir + '/coor.pid')
-        
+        #   raise ComponentIsNotRunning()
+        # Use built-in method to check status using pidfile v1
+        check_process_status('/var/run/presto/coor/coor.id')
+        :q
 
     def configure(self, env):
         import params
@@ -194,7 +191,7 @@ class PrestoMaster(Script):
         env.set_params(params)
 
         File("/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties",
-             content=Template("config.properties11.j2"),
+             content=Template("config.master.properties.j2"),
              owner=params.presto_user,
              group=params.presto_group
              )

@@ -7,7 +7,8 @@ from p_utils import *
 from presto_utils import *
 import pwd,grp
 
-
+import os
+UUID = os.system('uuidgen')
 class PrestoWorker(Script):
 
     def install(self, env):
@@ -56,23 +57,23 @@ class PrestoWorker(Script):
                   create_parents=True
                   )
 
-        # Logger.info('Creating presto required pid directory')
-        # Directory(['/var/run/presto/worker/worker.id'],
-        #           mode=0755,
-        #           cd_access='a',
-        #           owner=params.presto_user,
-        #           group=params.presto_group,
-        #           create_parents=True
-        #           )
+        Logger.info('Creating presto required pid directory')
+        Directory([params.presto_coor_pid_dir],
+                  mode=0755,
+                  cd_access='a',
+                  owner=params.presto_user,
+                  group=params.presto_group,
+                  create_parents=True
+                  )
 
-        # Logger.info('Creating presto required logs directory')
-        # Directory([params.presto_log_dir],
-        #           mode=0755,
-        #           cd_access='a',
-        #           owner=params.presto_user,
-        #           group=params.presto_group,
-        #           create_parents=True
-        #           )
+        Logger.info('Creating presto required logs directory')
+        Directory([params.presto_log_dir],
+                  mode=0755,
+                  cd_access='a',
+                  owner=params.presto_user,
+                  group=params.presto_group,
+                  create_parents=True
+                  )
 
         # activate java env
         Execute("echo \"JAVA_HOME={0}/jdk-11.0.9\" >> ~/.bashrc && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> ~/.bashrc".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
@@ -103,12 +104,13 @@ class PrestoWorker(Script):
         
         import os
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties && chmod -R 777 /home/presto')
-        os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g" config.properties')
-        os.system(format('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=/discovery.uri=http://{params.presto_master_ip}:30088/g" config.properties'))
+        #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/coordinator=true/coordinator=false/g" config.properties && sed -i "s/discovery-server.enabled/#discovery-server.enabled/g" config.properties')
+        #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=http:\/\/10.180.210.24:30088/discovery.uri=http:\/\/10.180.210.93:30088/g" config.properties && chmod -R 777 /home/presto')
+        #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node-scheduler.include-coordinator=false/#node-scheduler.include-coordinator=false/g" config.properties')
+        #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=/discovery.uri=http:\/\/'+ params.presto_master_ip + ':30088/g" config.properties')
 
-        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start", user='presto')
+        self.configure(env)
+        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(UUID), user='presto')
         
         Logger.info('presto installation completed')
 
@@ -162,16 +164,18 @@ class PrestoWorker(Script):
         # cmd = get_start_yarn_session_cmd(params.presto_base_dir, params.presto_yarn_session_name, params.job_manager_heap_size, params.task_manager_heap_size, params.slot_count)
         # Execute(cmd, user=params.presto_user)
         # Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
-        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start", user='presto')
+        import os 
+        if os.system('pgrep presto') != 0:
+            Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(UUID), user='presto')
         Logger.info('presto start process completed')
 
     def status(self, env):
-        raise ClientComponentHasNoStatus()
+        # raise ClientComponentHasNoStatus()
         # import status_params
         # env.set_params(status_params)
 
-        # Use built-in method to check status using pidfile
-        # check_process_status(params.presto_coor_pid_dir + '/coor.pid')
+        # Use built-in method to check status using pidfilcde
+        check_process_status(params.presto_coor_pid_dir + '/coor.pid')
         # return False
 
     def configure(self, env):
@@ -179,13 +183,13 @@ class PrestoWorker(Script):
 
         Logger.info('Configuring presto')
         Logger.info('Configure presto worker complete')
-        # env.set_params(params)
+        env.set_params(params)
 
-        # File("{0}/{1}/conf/presto-conf.yaml".format(params.presto_base_dir, presto_DIR_NAME),
-        #      content=Template("presto-conf.yaml.j2"),
-        #      owner=params.presto_user,
-        #      group=params.presto_group
-        #      )
+        File("/home/presto/worker/presto-server-345/etc/config_new.properties",
+             content=Template("config.worker.properties.j2"),
+             owner=params.presto_user,
+             group=params.presto_group
+             )
 
 
 if __name__ == '__main__':
