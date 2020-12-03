@@ -124,7 +124,11 @@ class PrestoWorker(Script):
         # else:
         #     Logger.info('Cannot not kill presto : {0}. Maybe it is not running'.format(params.presto_group))
         import os
+        import params
+
         os.system('kill -9 $(pgrep presto)')
+        os.system('rm -rf /var/run/presto/worker/worker.id')
+        Logger.info('Presto coor server stop completed')
         # pid_file = params.presto_coor_pid_dir + '/coor.pid'
         # pid = os.popen('cat {pid_file}'.format(pid_file=pid_file)).read()
 
