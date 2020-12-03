@@ -10,6 +10,9 @@ import pwd,grp
 
 
 class PrestoMaster(Script):
+    # for restart method only, restart 会调用prepare方法。 解决一个重启相关的bug.
+    def prepare(self):
+      stop()
 
     def install(self, env):
         import params
@@ -169,7 +172,7 @@ class PrestoMaster(Script):
         # Execute(cmd, user=params.presto_user)
         import os 
         if os.system('pgrep presto') != 0:
-          Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --pid-file=/var/run/presto/coor/coor.id  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties' && echo $(pgrep presto) > /var/run/presto/coor/coor.id".format(params.presto_log_launcher, params.presto_log_server), user='root')
+          Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start  --pid-file=/var/run/presto/coor/coor.id  --launcher-log-file={} --server-log-file={} --config='/var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/configuration/config_new.properties'".format(params.presto_log_launcher, params.presto_log_server), user='root')
         Logger.info('start process finished, succssfully start')
 
     def status(self, env):

@@ -110,7 +110,7 @@ class PrestoWorker(Script):
         #os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/discovery.uri=/discovery.uri=http:\/\/'+ params.presto_master_ip + ':30088/g" config.properties')
         # os.system('chmod -R 777 /var/run/presto')
         self.configure(env)
-        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(UUID), user='presto')
+        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(''), user='presto')
         
         Logger.info('presto installation completed')
 
@@ -166,7 +166,7 @@ class PrestoWorker(Script):
         # Execute("/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher start --pid-file={} --launcher-log-file={} --server-log-file={}".format(params.presto_coor_pid_dir + '/coor.pid',params.presto_log_launcher, params.presto_log_server), user='root')
         import os 
         if os.system('pgrep presto') != 0:
-            Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(UUID), user='presto')
+            Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file=/var/run/presto/worker/worker{0}.id ".format(''), user='presto')
         Logger.info('presto start process completed')
 
     def status(self, env):
@@ -175,7 +175,7 @@ class PrestoWorker(Script):
         # env.set_params(status_params)
 
         # Use built-in method to check status using pidfilcde
-        check_process_status("/var/run/presto/worker/worker{0}.id".format(UUID) )
+        check_process_status("/var/run/presto/worker/worker{0}.id".format('') )
         # return False
 
     def configure(self, env):
