@@ -31,6 +31,7 @@ class PrestoMaster(Script):
             pwd.getpwnam(params.presto_user)
         except KeyError:
             Execute("useradd presto -m -g presto", user='root')
+        Execute("useradd presto -m -g presto", user='root')
         
         Logger.info('Creating presto install directory')
         Directory([params.presto_base_dir],
