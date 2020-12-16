@@ -68,6 +68,10 @@ class PrestoWorker(Script):
                   create_parents=True
                   )
 
+        File("/var/run/presto/worker/worker.id",
+            mode = 0777,
+            content = '8888'
+          )
         # activate java env
         Execute("echo \"JAVA_HOME={0}/jdk-11.0.9\" >> ~/.bashrc && echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> ~/.bashrc".format('/home/presto/worker/presto-server-345/jdk11'), user='presto')
         #Execute("echo \"export PATH=$JAVA_HOME/bin:$PATH\" >> ~/.bashrc", user='presto')
@@ -126,7 +130,7 @@ class PrestoWorker(Script):
         # env.set_params(status_params)
 
         # Use built-in method to check status using pidfilcde
-        check_process_status("/var/run/presto/worker/worker{0}.id".format('') )
+        check_process_status("/var/run/presto/worker/worker.id")
 
     def configure(self, env):
         import params
