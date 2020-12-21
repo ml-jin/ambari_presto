@@ -47,7 +47,7 @@ class PrestoMaster(Script):
 
         Logger.info('Creating presto required jdk11+ directory')
         Directory([params.presto_jdk11_dest],
-                  mode=0755,
+                  mode=0777,
                   cd_access='a',
                   owner=params.presto_user,
                   group=params.presto_group,

@@ -101,7 +101,8 @@ class PrestoWorker(Script):
         import os
         os.system('cd /home/presto/worker/presto-server-345/etc/ && sed -i "s/node.id=ffffffff-ffff-ffff-ffff-ffffffffffff/node.id=$(uuidgen)/g" node.properties ')
         self.configure(env)
-        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file='/var/run/presto/worker/worker.id'", user='presto')
+
+        Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config=/home/presto/worker/presto-server-345/etc/config_new.properties --pid-file=/var/run/presto/worker/worker.id && echo $(pgrep presto) > /var/run/presto/worker/worker.id ", user='presto')
         
         Logger.info('presto installation completed')
 
@@ -110,7 +111,7 @@ class PrestoWorker(Script):
         import params
 
         os.system('kill -9 $(pgrep presto)')
-        os.system('rm -rf /var/run/presto/worker/worker.id')
+        os.system('rm -f /var/run/presto/worker/worker.id')
         Logger.info('Presto coor server stop completed')
 
 
@@ -122,7 +123,7 @@ class PrestoWorker(Script):
 
         import os 
         if os.system('pgrep presto') != 0:
-            Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config='/home/presto/worker/presto-server-345/etc/config_new.properties' --pid-file='/var/run/presto/worker/worker.id' ", user='presto')
+            Execute("source /home/presto/.bashrc && /home/presto/worker/presto-server-345/bin/launcher start --config=/home/presto/worker/presto-server-345/etc/config_new.properties --pid-file=/var/run/presto/worker/worker.id && echo $(pgrep presto) > /var/run/presto/worker/worker.id ", user='presto')
         Logger.info('presto start process completed')
 
     def status(self, env):
