@@ -119,7 +119,7 @@ class PrestoWorker(Script):
         import params
 
         Logger.info('Updating presto configuration')
-        self.configure(env)
+        #self.configure(env)
 
         import os 
         if os.system('pgrep presto') != 0:

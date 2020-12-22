@@ -11,8 +11,8 @@ import pwd,grp
 
 class PrestoMaster(Script):
     # for restart method only, restart 会调用prepare方法。 解决一个重启相关的bug.
-    def prepare(self):
-        stop()
+    # def prepare(self):
+    #     stop()
 
     def install(self, env):
         import params
@@ -113,7 +113,7 @@ class PrestoMaster(Script):
         import params
 
         Logger.info('Updating presto configuration')
-        self.configure(env)
+        #self.configure(env)
 
         import os 
         if os.system('pgrep presto') != 0:
