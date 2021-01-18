@@ -182,14 +182,14 @@ SELECT * FROM system.runtime.nodes;
 
 信息显示样例：
 
+``` bash
                node_id                |          http_uri          | node_version | coordinator
 --------------------------------------+----------------------------+--------------+----------
- ffffffff-ffff-ffff-ffff-ffffffffff00 | http://[worker1]:50022 | 345          | false    
- ffffffff-ffff-ffff-ffff-ffffffffff01 | http://[coor1]:30088 | 345          | true   
+ ffffffff-ffff-ffff-ffff-ffffffffff00 | http://10.180.210.93:50022 | 345          | false    
+ ffffffff-ffff-ffff-ffff-ffffffffff01 | http://10.180.210.94:30088 | 345          | true   
+```
 
-
-
-若以上测试均通过，则说明部署Presto HA成功。
+若以上测试均通过，则说明部署Presto HA 部署成功。
 
 # 作者信息
 
