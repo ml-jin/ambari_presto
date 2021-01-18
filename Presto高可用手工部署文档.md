@@ -6,16 +6,26 @@
 
 - Ambari-server: 2.7.1 
 - Apache PrestoSQL: 345
+- Nginx ： 1.6.1
+- PCRE：8.32.17
+- zlib:  1.2.7
+- openssl: 1.0.2
 
 ## 前期准备
 
 ### Nginx 依赖整理以及Nginx 安装  - pcre, zlib, openssl.tgz
 
-存放pcre, zlib, openssl 压缩包，到HOME下的presto目录：
+```bash
+yum install -y pcre pcre-devel
+yum install -y zlib zlib-devel
+yum install -y openssl
+```
 
-- *.tar.gz (PrestoSQL官网)
 
-### 提供PRESTO安装包内网下载
+
+或者下载pcre, zlib, openssl 压缩包，到HOME下的presto目录并离线安装：
+
+### 提供Nginx安装包内网下载
 
 - 安装httpd服务
 
@@ -27,7 +37,7 @@ sudo yum install httpd
 
 ```
 mkdir -p /var/www/html/InsightHD/hdp/presto/
-cp /path/to/presto.tar.gz /var/www/html/InsightHD/hdp/presto/
+cp /path/to/nginx-1.16.1.tar.gz /var/www/html/InsightHD/hdp/presto/
 ```
 
 - 启动httpd服务
@@ -38,96 +48,148 @@ systemctl start httpd.service
 
 - 检查http server是否正常启动
 
-浏览器打开http://server-ip/InsightHD/hdp/presto/。查看是否显示presto安装包。
+浏览器打开http://server-ip/InsightHD/hdp/presto/。查看是否显示Nginx安装包。
 
-- 修改每个节点配置, 并设置ulimit
+- 下载Nginx 安装包
 
 ```bash
-vim /etc/security/limits.conf
-
-## 添加如下两行
-* soft nofile 131072
-* hard nofile 131072
+cd /home/presto
+wget http://[ip]/InsightHD/hdp/presto/nginx-1.16.1.tar.gz
 ```
 
-
+- 安装三节点presto server, 其中连个coordinator(coor1, coor2), 一个worker. 安装过程参考集成流程文档。
 
 ## 安装 Nginx Service
 
-- 复制 PRESTO-345 到ambari目录，并修改项目根目录下的bin/launcher文件
+- 解压缩 NGINX 到presto目录，并修改项目/usr目录下的conf/nginx.conf文件
 
 ```
-cp -r /path/to/PRESTO-345/ /var/lib/ambari-server/resources/stacks/HDP/3.0/services/PRESTO/
+cd /home/presto
+tar -zxvf nginx-1.16.1.tar.gz
 ```
 
-修改launcher文件，在`exec "$(dirname "$0")/launcher.py" "$@"`加入两行, 修改java 环境
+编译Nginx(默认已安装gcc++环境). 若无报错，则说明编译成功
 
 ```bash
-PATH=/usr/hdp/3.0.1.0-187/presto/presto-server-345/jdk11/jdk-11.0.9/bin/:$PATH
-export PATH
+cd nginx-1.16.1/
+./configure && make && make install
 ```
 
-- 重新启动ambari-server
+- 修改nginx配置
+
+``` bash
+vim /usr/local/nginx/conf/nginx.conf
+```
+
+修改配置项, 分别定义后端服务器及端口，以及前端服务器及接口。backserver 为服务代理名称，可使用任意变量。
+
+``` bash
+#gzip  on;
+    upstream [backserver] {  
+      #ip_hash; 
+      server [ip_coor1]:30088;
+      server [ip_coor2]:30088 backup;
+    }
+    
+    server {
+        listen       50022;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            proxy_pass http://[backserver];
+            #root   html;
+            index  index.html index.htm;
+            proxy_connect_timeout 1;
+            proxy_send_timeout 1;
+            proxy_read_timeout 1;
+        }
+```
+
+
+
+- 启动nginx-server, 访问[nginx_ip]:50022, 若显示presto 监控页面，则说明配置成功。
 
 ```
-sudo ambari-server restart
+/usr/local/nginx/sbin/nginx
 ```
 
-## 启动Nginx Service
+## 重启Presto Service
 
-创建mysql.properties，放入主节点/usr/hdp/3.0.1.0-187/presto/presto-server-345/etc/catalog/ 目录和worker节点/home/presto/worker/presto-server-345/etc/catalog目录下
+- 创建coor1,coor2 server config.properties配置
 
 ```bash
-connector.name=mysql
-
-connection-url=jdbc:mysql://[ip]:3306
-
-connection-user=[user]
-
-connection-password=[password]
+coordinator=true
+  node-scheduler.include-coordinator=true
+  http-server.http.port=30088
+  query.max-memory=5GB
+  query.max-memory-per-node=1GB
+  query.max-total-memory-per-node=2GB
+  discovery-server.enabled=true
+  discovery.uri=http://[填写coor1_ip/coor2_ip自身]:30088
 ```
 
-- 创建hive.properties
+- worker config.properties配置：
 
-  ```bash
-  connector.name=hive-hadoop2
-  hive.metastore.uri=thrift://[IP]:9083
-  hive.config.resources=/etc/hadoop/3.0.1.0-187/0/core-site.xml,/etc/hadoop/3.0.1.0-187/0/hdfs-site.xml
-  hive.allow-drop-table=true
-  hive.allow-rename-table=true
-  ```
-
-- Hive client 连接命令：
-
-  ```bash
-  /usr/hdp/3.0.1.0-187/presto/presto-server-345/presto-cli --server [ip]:30088 --catalog hive --schema [dbname]
-  # 进入presto 客户端交互模式
-  show schemas;
-  show tables; ...
-  ```
+```bash
+  coordinator=false
+  http-server.http.port=50022
+  query.max-memory=5GB
+  query.max-memory-per-node=1GB
+  query.max-total-memory-per-node=2GB
+  discovery.uri=http://[nginx]:50022
+```
 
 ## 启动Presto Service - 两个Coordinator, 一个worker节点 
 
+- 进入presto安装根目录, 重启服务器. 
+
 ``` bash
-
+cd /path/to/presto
+./bin/launcher start
 ```
 
 
 
-## 测试Presto 主备Coordinator
+## 测试Presto 主备Coordinator切换
 
-进入到Presto的安装目录，执行如下命令,可以查询到当前数据库中的表（schema对应mysql数据库名）：
+进入到chrome 浏览器， 输入http://[nginx_ip]:50022, 应显示为2个worker. 代表一个worker主机和一个主coor1 server1.
 
-```shell
-cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/
-./presto-cli --server ip:30088 --catalog mysql  --schema test
-show schemas
-use [schema]
-show tables;
+- 使用命令关闭第一个presto. 可以看到presto 稍过片刻，提示登录，登陆后依然可以看到两个worker, 为worker1, coor2.
+
+``` )bash
+kill -9 $(pgrep presto)
+```
+
+- 使用presto命令重启coor1, 可以看到监控页面登出，重新登陆后，稍等10s, 可以看到服务重新切回coor1 和worker1.
+
+```bash
+cd /path/to/presto
+./bin/launcher start
 
 ```
 
-之后进入presto管理页面，输入coordinator 主节点http://ip:30088 查看Running Node。如果可以查看页面，并且显示具体worker数目，搜索查询可以即时显示，则启动成功。
+- 集群节点信息查询方法。
+
+```bash
+cd /path/to/presto-dir
+./presto-cli --server [server_ip]:30088 --catalog hive
+SELECT * FROM system.runtime.nodes;
+```
+
+信息显示样例：
+
+               node_id                |          http_uri          | node_version | coordinator
+--------------------------------------+----------------------------+--------------+----------
+ ffffffff-ffff-ffff-ffff-ffffffffff00 | http://[worker1]:50022 | 345          | false    
+ ffffffff-ffff-ffff-ffff-ffffffffff01 | http://[coor1]:30088 | 345          | true   
+
+
+
+若以上测试均通过，则说明部署Presto HA成功。
 
 # 作者信息
 
