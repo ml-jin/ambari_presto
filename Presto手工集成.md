@@ -9,31 +9,16 @@
 
 ## 前期准备
 
-### Presto JDK 依赖整理 - JAVA 需要11+ 版本
-
-添加如下文件到JAVA的HOME目录：
-
-* presto-server-345.tar.gz (PrestoSQL官网)
+### Presto JDK 依赖整理 - JAVA 需要11+ 版本包
 
 ### 提供PRESTO安装包内网下载
 
-* 安装httpd服务
-
-```shell
-sudo yum install httpd
-```
-
-* 复制presto安装包到目录
+* 复制presto安装包和JDK11+ 到目录
 
 ```
 mkdir -p /var/www/html/InsightHD/hdp/presto/
-cp /path/to/presto.tar.gz /var/www/html/InsightHD/hdp/presto/
-```
-
-* 启动httpd服务
-
-```
-systemctl start httpd.service
+cp jdk-11.0.9_linux-x64_bin.tar /var/www/html/InsightHD/hdp/presto/
+cp presto-server-345.tar /var/www/html/InsightHD/hdp/presto/
 ```
 
 * 检查http server是否正常启动
@@ -50,8 +35,6 @@ vim /etc/security/limits.conf
 * hard nofile 131072
 ```
 
-
-
 ## 安装 Ambari Presto Service
 
 * 复制 PRESTO-345 到ambari目录
@@ -59,8 +42,6 @@ vim /etc/security/limits.conf
 ```
 cp -r /PRESTO/ /var/lib/ambari-server/resources/stacks/HDP/3.0/services/
 ```
-
- 
 
 ~~修改launcher文件，在/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher.py 加入两行~~
 
@@ -70,7 +51,7 @@ cp -r /PRESTO/ /var/lib/ambari-server/resources/stacks/HDP/3.0/services/
 sudo ambari-server restart
 ```
 
-## 安装presto
+## Ambari 安装presto
 
 1. 进入并登录ambari。点击左侧的`Actions`按钮，选择`Add service`。
 2. 在打开的窗口中勾选PRESTO服务。
@@ -107,21 +88,21 @@ connection-password=[password]
 - Hive client 连接命令：
 
 ``` bash
-  /usr/hdp/3.0.1.0-187/presto/presto-server-345/presto-cli --server [ip]:30088 --catalog hive --schema [dbname]
+  /usr/hdp/3.0.1.0-187/presto/presto-server-345/presto-cli --server [coor_ip]:30088 --catalog hive --schema [dbname]
   # 进入presto 客户端交互模式
   show schemas;
-  show tables; ...
+  show tables; 
+  ...
 ```
 
-进入到Presto的安装目录，执行如下命令,可以查询到当前数据库中的表（schema对应mysql数据库名）：
+进入到Presto的安装目录，执行如下命令,可以到当前数据库中的表（schema对应mysql数据库名）：
 
 ```shell
 cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/
 ./presto-cli --server ip:30088 --catalog mysql  --schema test
-show schemas
-use [schema]
+show schemas;
+use [schema];
 show tables;
-
 ```
 
 之后进入presto管理页面，输入coordinator 主节点http://ip:30088 查看Running Node。如果可以查看页面，并且显示具体worker数目，搜索查询可以即时显示，则启动成功。
@@ -131,5 +112,3 @@ show tables;
 金昭
 
 浪潮系统软件部研发六处 -  三组
-
-
