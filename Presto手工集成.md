@@ -63,7 +63,7 @@ sudo ambari-server restart
 
 ## 启动Presto Service
 
-创建mysql.properties，放入主节点/usr/hdp/3.0.1.0-187/presto/presto-server-345/etc/catalog/ 目录和worker节点/home/presto/worker/presto-server-345/etc/catalog目录下
+创建mysql.properties，放入主节点和worker节点对应/usr/hdp/3.0.1.0-187/presto/presto-server-345/etc/catalog/ 目录
 
 ``` bash
 connector.name=mysql
@@ -92,10 +92,9 @@ connection-password=[password]
   # 进入presto 客户端交互模式
   show schemas;
   show tables; 
-  ...
 ```
 
-进入到Presto的安装目录，执行如下命令,可以到当前数据库中的表（schema对应mysql数据库名）：
+再Ambari UI 界面重启Presto，进入到 Presto coordinator 的安装根目录，执行如下命令,可以到当前数据库中的表（schema对应mysql数据库名）：
 
 ```shell
 cd /usr/hdp/3.0.1.0-187/presto/presto-server-345/
@@ -105,10 +104,10 @@ use [schema];
 show tables;
 ```
 
-之后进入presto管理页面，输入coordinator 主节点http://ip:30088 查看Running Node。如果可以查看页面，并且显示具体worker数目，搜索查询可以即时显示，则启动成功。
+之后进入presto管理页面，输入coordinator 主节点http://ip:30088 查看Running Node。如果可以查看页面，并且显示具体worker数目（为coordinator 数目 + worker 数目），且搜索查询可以即时显示，则启动成功。
 
 # 作者信息
 
 金昭
 
-浪潮系统软件部研发六处 -  三组
+云计算与大数据研发部 - 浪潮系统软件部研发六处 -  三组
