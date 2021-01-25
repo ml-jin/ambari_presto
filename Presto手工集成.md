@@ -16,6 +16,10 @@
 * 复制presto安装包和JDK11+ 到目录
 
 ```
+cd /var/www/html/
+cp -r InsightHD tmp/
+umount Insight
+mv tmp/ InsightHD/
 mkdir -p /var/www/html/InsightHD/hdp/presto/
 cp jdk-11.0.9_linux-x64_bin.tar /var/www/html/InsightHD/hdp/presto/
 cp presto-server-345.tar /var/www/html/InsightHD/hdp/presto/
