@@ -41,13 +41,11 @@ vim /etc/security/limits.conf
 
 ## 安装 Ambari Presto Service
 
-* 复制 PRESTO-345 到ambari目录
+* 复制 PRESTO-345 集成源码（目录名为PRESTO）到ambari目录
 
-```
+```bash
 cp -r /PRESTO/ /var/lib/ambari-server/resources/stacks/HDP/3.0/services/
 ```
-
-~~修改launcher文件，在/usr/hdp/3.0.1.0-187/presto/presto-server-345/bin/launcher.py 加入两行~~
 
 * 重新启动ambari-server
 
