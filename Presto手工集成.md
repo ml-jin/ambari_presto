@@ -47,7 +47,7 @@ vim /etc/security/limits.conf
 cp -r /PRESTO/ /var/lib/ambari-server/resources/stacks/HDP/3.0/services/
 ```
 
-* 重新启动ambari-server
+* 登陆manager 节点，重新启动ambari-server
 
 ```
 sudo ambari-server restart
