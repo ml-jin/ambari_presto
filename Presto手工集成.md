@@ -108,6 +108,8 @@ show tables;
 
 之后进入presto管理页面，输入coordinator 主节点http://ip:30088 查看Running Node。如果可以查看页面，并且显示具体worker数目（为coordinator 数目 + worker 数目），且搜索查询可以即时显示，则启动成功。
 
+注：若断电自启，最好检查下源挂载点是否异常，若异常，执行umount InsightHD, 可修复。
+
 # 作者信息
 
 金昭
